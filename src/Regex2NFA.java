@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.Scanner;
 import java.util.Stack;
 
-/**Main is the driver class for the REGEX Engine
+/**Regex2NFA is the driver class for the REGEX Engine
  * It will open a file a text file that contains postfix order Regular Expressions
  * separated one per line, and then create an NFA for each of these REGEX
  * Main will use the first command-line parameter as the name of the file to open.
@@ -105,6 +105,7 @@ public class Regex2NFA {
                             default -> {
                                 System.out.println("The character " + temp + " is not part of the alphabet for this language");
                                 badInputFlag = true;
+                                stackClear(nfaStack);
                             }
                         }
                     }
