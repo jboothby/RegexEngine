@@ -10,7 +10,7 @@ import java.util.Stack;
  * If no file-name is supplied, it will default to regex_postfix.txt which is supplied in this package.
  * @author JosephBoothby
  */
-public class Regex2NFA {
+public class Main {
 
     public static void main(String[] args) {
 
@@ -21,10 +21,12 @@ public class Regex2NFA {
         //initialize a file. This will default to regex_postfix.txt if there is no filename supplied by the args parameter
         File inputFile;
         if( args.length > 0){
+            System.out.println("Command line argument detected. Using file name \"" + args[0] + "\"" );
             inputFile = new File(args[0]);
         }
-        else{
+        else{            System.out.println("Command Line argument not detected. Using default file name \"regex_postfix.txt\"");
             inputFile = new File("regex_postfix.txt");
+
         }
 
 
@@ -75,6 +77,7 @@ public class Regex2NFA {
                                 else{
                                     System.out.println("The RegEx is improperly formed for use of the | operator");
                                     badInputFlag = true;
+                                    stackClear(nfaStack);
                                 }
                             }
                             //for character &, perform the concatenation operation if the stack contains enough items to do it
@@ -88,6 +91,7 @@ public class Regex2NFA {
                                 else{
                                     System.out.println("The RegEx is improperly formed for the use of the & operator");
                                     badInputFlag = true;
+                                    stackClear(nfaStack);
                                 }
                             }
                             //For the * operator, perform the * operation if the stack has an item. Push this back onto the stack.
@@ -99,17 +103,21 @@ public class Regex2NFA {
                                 else{
                                     System.out.println("The RegEx is improperly formed for the use of the * operator");
                                     badInputFlag = true;
+                                    stackClear(nfaStack);
                                 }
                             }
                             //if the character is not in the alphabet (sigma) then the input is bad. Output error message, and set flag
                             default -> {
                                 System.out.println("The character " + temp + " is not part of the alphabet for this language");
                                 badInputFlag = true;
+                                stackClear(nfaStack);
                             }
                         }
                     }
+                    else break; //breaks loop if bad input is detected to avoid unnecessary processing
                 }
                 //if the NFA has a single item on the stack, then the operation was successful. output the final NFA
+                //because each bad operation clears the stack, this should only run if input was correct format
                 if( nfaStack.size() == 1 ) {
                     NFA output = nfaStack.pop(); //print the NFA on the top of the stack
                     output.print();
